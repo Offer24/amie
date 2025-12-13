@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دليل الهوية الكامل - A'mie Brand Master Guide</title>
+    <style>
+        :root {
+            /* ألوان الهوية الأساسية */
+            --cool-grey: #D9D8D7;
+            --black: #191919;
+            --smoke-white: #F2F2F2;
+            --gardenia: #F2E4DF;
+            
+            /* تنسيقات الصفحة */
+            --primary-accent: #D4A3A3; 
+            --text-color: #333;
+            --section-bg: #ffffff;
+            --bg-body: #f7f7f7;
+            --radius: 12px;
+            --shadow: 0 4px 10px rgba(0,0,0,0.04);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+        }
+
+        /* الهيدر */
+        header {
+            text-align: center;
+            background: var(--section-bg);
+            padding: 50px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 40px;
+            border-bottom: 5px solid var(--primary-accent);
+        }
+
+        h1 { margin: 0; color: var(--black); font-size: 2.2em; }
+        .slogan { color: #777; font-style: italic; margin-top: 10px; font-size: 1.1em; }
+        .version { font-size: 0.8em; color: #aaa; margin-top: 5px; display: block; }
+
+        /* البطاقات والأقسام */
+        .section-card {
+            background: var(--section-bg);
+            padding: 30px;
+            margin-bottom: 25px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-card::before {
+            content: '';
+            position: absolute;
+            right: 0; top: 0; bottom: 0;
+            width: 4px;
+            background: var(--primary-accent);
+        }
+
+        h2 { color: var(--black); border-bottom: 1px solid #eee; padding-bottom: 15px; margin-top: 0; }
+        h3 { color: #666; margin-top: 25px; font-size: 1.1em; }
+
+        /* الألوان (Color Palette) */
+        .color-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .color-item {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            overflow: hidden;
+            text-align: center;
+            padding-bottom: 10px;
+            background: #fff;
+        }
+
+        .swatch {
+            height: 80px;
+            width: 100%;
+            display: block;
+        }
+
+        .color-info {
+            padding: 10px 5px 0;
+            font-size: 0.9em;
+        }
+        .hex-code {
+            display: block;
+            font-family: monospace;
+            color: #888;
+            font-size: 0.85em;
+        }
+
+        /* القوائم والجداول */
+        ul { list-style: none; padding: 0; }
+        ul li { padding: 5px 0; position: relative; padding-right: 20px; }
+        ul li::before { content: "•"; color: var(--primary-accent); position: absolute; right: 0; font-weight: bold; }
+        
+        .dont-list li::before { content: "✕"; color: #c62828; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { padding: 12px; border-bottom: 1px solid #eee; text-align: right; }
+        th { background: #fafafa; color: #555; }
+        .badge { background: #eee; padding: 4px 10px; border-radius: 4px; font-size: 0.9em; margin-left: 5px; }
+
+        /* الخطوط */
+        .font-preview {
+            border: 1px dashed #ccc;
+            padding: 15px;
+            margin-top: 5px;
+            background: #fafafa;
+            border-radius: 6px;
+        }
+
+        /* الفوتر */
+        .footer { text-align: center; margin-top: 50px; color: #aaa; font-size: 0.9em; }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+<header>
+        <h1>A'mie Brand Book</h1>
+        <div class="slogan">"الجمال ليس تحولاً، بل هو كشف عن الذات"</div>
+        <div class="meta">Marketing &amp; Visual Guidelines v1.0 | 2025</div>
+    </header>
+
+    <div class="section-card">
+        <h2>1. الجوهر والتموضع (Brand Essence)</h2>
+        <p><strong>التعريف:</strong> "amie" هي احتفال بالجمال الخالد، تمزج بين الابتكار والرقي.</p>
+        
+        <h3>القيم الأساسية (Core Values):</h3>
+        <ul>
+            <li><strong>الفخامة (Luxury):</strong> كل نقطة اتصال تعطي شعوراً متميزاً.</li>
+            <li><strong>الثقة (Confidence):</strong> تعزيز الثقة بالنفس.</li>
+            <li><strong>البساطة (Simplicity):</strong> فوضى أقل، ووضوح أكثر.</li>
+            <li><strong>الابتكار (Innovation):</strong> تركيبات حديثة وتصميم خالد.</li>
+        </ul>
+
+        <h3>نبرة الصوت (Tone of Voice):</h3>
+        <p>هادئة (Calm) • راقية (Refined) • ملهمة (Inspiring) • واثقة (Confident)</p>
+    </div>
+
+    <div class="section-card">
+        <h2>2. لوحة الألوان (Color Palette)</h2>
+        
+        <h3>الألوان الأساسية (Primary):</h3>
+        <div class="color-grid">
+            <div class="color-item">
+                <span class="swatch" style="background-color: #D9D8D7;"></span>
+                <div class="color-info"><strong>Cool Grey</strong><span class="hex-code">#D9D8D7</span></div>
+            </div>
+            <div class="color-item">
+                <span class="swatch" style="background-color: #191919;"></span>
+                <div class="color-info"><strong>Black</strong><span class="hex-code">#191919</span></div>
+            </div>
+            <div class="color-item">
+                <span class="swatch" style="background-color: #F2F2F2; border-bottom:1px solid #eee;"></span>
+                <div class="color-info"><strong>Smoke White</strong><span class="hex-code">#F2F2F2</span></div>
+            </div>
+            <div class="color-item">
+                <span class="swatch" style="background: linear-gradient(135deg, #E0E0E0 0%, #F5F5F5 100%);"></span>
+                <div class="color-info"><strong>Silver</strong><span class="hex-code">Gradient (Luxury)</span></div>
+            </div>
+        </div>
+
+        <h3>ألوان المنتجات والثانوية (Secondary):</h3>
+        <div class="color-grid">
+            <div class="color-item">
+                <span class="swatch" style="background-color: #F2E4DF;"></span>
+                <div class="color-info"><strong>Gardenia</strong><span class="hex-code">#F2E4DF</span></div>
+            </div>
+            <div class="color-item">
+                <span class="swatch" style="background-color: #C4D1DE;"></span>
+                <div class="color-info"><strong>Sparrow</strong><span class="hex-code">#C4D1DE</span></div>
+            </div>
+            <div class="color-item">
+                <span class="swatch" style="background-color: #7b1e26;"></span> <div class="color-info"><strong>Red Dahlia</strong><span class="hex-code">Deep Red</span></div>
+            </div>
+             <div class="color-item">
+                <span class="swatch" style="background-color: #6a5acd;"></span> <div class="color-info"><strong>Potent Purple</strong><span class="hex-code">Pearl Blue/Purple</span></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-card">
+        <h2>3. قواعد الشعار (Logo Guidelines)</h2>
+        <p>شعار نصي (Serif) يعكس الأناقة والتوازن.</p>
+        
+        <table style="width: 100%;">
+            <tr>
+                <td width="30%"><strong>الأيقونة (Icon)</strong></td>
+                <td>استخدام حرف "a" منفرداً في التطبيقات المصغرة.</td>
+            </tr>
+            <tr>
+                <td><strong>المساحة الآمنة</strong></td>
+                <td>مسافة تعادل ارتفاع حرف "a" الصغير حول الشعار بالكامل.</td>
+            </tr>
+        </table>
+
+        <h3>الأحجام المعتمدة:</h3>
+        <ul>
+            <li><span class="badge">128px / 96px</span> التفاصيل كاملة.</li>
+            <li><span class="badge">64px</span> الاستخدام الرقمي والمطبوع القياسي.</li>
+            <li><span class="badge">32px</span> الحد الأدنى (أيقونات التطبيقات فقط).</li>
+        </ul>
+
+        <h3 style="color: #c62828;">الممنوعات (Don'ts):</h3>
+        <ul class="dont-list">
+            <li>يمنع التدوير أو المط أو التقصير.</li>
+            <li>يمنع التغيير اللوني خارج اللوحة المعتمدة.</li>
+            <li>يمنع استخدام التحديد (Outline) أو الحدود (Stroke).</li>
+        </ul>
+    </div>
+
+    <div class="section-card">
+        <h2>4. الخطوط (Typography)</h2>
+        
+        <h3>اللغة الإنجليزية (English):</h3>
+        <ul>
+            <li><strong>العناوين:</strong> Font Name: <strong>Baguile</strong> (Uppercase & Lowercase).</li>
+            <li><strong>النصوص:</strong> Font Name: <strong>Montserrat</strong> (Light, Regular, Bold).</li>
+        </ul>
+
+        <h3>اللغة العربية (Arabic):</h3>
+        <ul>
+            <li><strong>الخط المعتمد:</strong> <strong>SOMAR (سومار)</strong>.</li>
+            <li><strong>العناوين:</strong> وزن عريض (SemiBold).</li>
+            <li><strong>النصوص:</strong> وزن عادي (Regular).</li>
+        </ul>
+    </div>
+
+    <div class="section-card">
+        <h2>5. إرشادات السوشيال ميديا</h2>
+        <ul>
+            <li><strong>النمط البصري:</strong> يجب أن يعكس النقاء (Purity) والبساطة (Minimalism).</li>
+            <li><strong>الرسالة:</strong> التركيز على الجمال الطبيعي الهادئ وليس التجميل الصاخب.</li>
+            <li><strong>الجمهور:</strong> دول الخليج (السعودية، الإمارات، الكويت..) نساء يبحثن عن الجودة (18-45 سنة).</li>
+        </ul>
+    </div>
+	
+	    <div class="section-card">
+        <h2>6. الهوية ونبرة الصوت (Tone of Voice)</h2>
+        <p><strong>الهدف:</strong> تقديم محتوى متناسق، راقٍ، وأنثوي يعكس جودة منتجات A'mie.</p>
+        
+        <h3>سمات النبرة:</h3>
+        <ul>
+            <li>أنوثة ورقي، هدوء وثقة.</li>
+            <li>لغة ناعمة وإيحائية بدون مبالغة.</li>
+            <li>الاحتفاء بحب الذات والعناية المتوازنة.</li>
+            <li>إشعار العميلة بأنها تستحق الأفضل دائماً.</li>
+        </ul>
+
+        <h3>القيم الأساسية للعلامة:</h3>
+        <div class="values-container">
+            <span class="badge">الشغف</span>
+            <span class="badge">التفرد</span>
+            <span class="badge">الأناقة</span>
+            <span class="badge">حب الذات</span>
+            <span class="badge">الثقة</span>
+            <span class="badge">العناية</span>
+        </div>
+    </div>
+	
+	    <div class="section-card">
+        <h2>7. ضوابط كتابة المحتوى (Copywriting)</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th width="50%" style="color:#2e7d32">المسموح ✅</th>
+                    <th width="50%" style="color:#c62828">الممنوع ❌</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>يساعد على، يدعم، يعزز</td>
+                    <td>علاج نهائي، يغير بشرتك بالكامل</td>
+                </tr>
+                <tr>
+                    <td>يساهم في تحسين، نضارة</td>
+                    <td>سحر، معجزة، تبييض</td>
+                </tr>
+                <tr>
+                    <td>تجربة لطيفة، لمسة أنثوية</td>
+                    <td>يوقف التساقط نهائياً، يقضي تماماً</td>
+                </tr>
+                <tr>
+                    <td>وصف واقعي للفوائد</td>
+                    <td>يعالج الأمراض الجلدية (أكزيما وغيرها)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+	
+	    <div class="section-card">
+        <h2>8. ضوابط المحتوى (Do's & Don'ts)</h2>
+        <p>قائمة بالمصطلحات المعتمدة والمحظورة لضمان المصداقية وتجنب المخالفات.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th width="50%">المسموح (المفردات المعتمدة) ✅</th>
+                    <th width="50%">الممنوع (المحظورات) ❌</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="dos">يساعد على، يدعم، يعزز</td>
+                    <td class="donts">علاج نهائي، يغير بشرتك بالكامل</td>
+                </tr>
+                <tr>
+                    <td class="dos">يساهم في تحسين</td>
+                    <td class="donts">سحر / سحري، معجزة (Miracle)</td>
+                </tr>
+                <tr>
+                    <td class="dos">تجربة لطيفة، لمسة أنثوية</td>
+                    <td class="donts">يوقف التساقط نهائياً، يقضي تماماً</td>
+                </tr>
+                <tr>
+                    <td class="dos">إحساس بالتجدد</td>
+                    <td class="donts">نتائج مضمونة، 100% مضمون</td>
+                </tr>
+                <tr>
+                    <td class="dos">وصف واقعي للفوائد</td>
+                    <td class="donts">يعالج الأمراض الجلدية، يعالج الأكزيما</td>
+                </tr>
+                <tr>
+                    <td class="dos">تفتيح / نضارة</td>
+                    <td class="donts">تبييض، إزالة نهائية، يزيل الندبات نهائياً</td>
+                </tr>
+                <tr>
+                    <td class="dos">لطيفة على البشرة</td>
+                    <td class="donts">بدون أي آثار جانبية، يفتح من أول استخدام</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+	
+	    <div class="section-card">
+        <h2>9. دليل المدونة (Blog Guidelines)</h2>
+        <ul>
+            <li><strong>اللغة العربية:</strong> أسلوب أنثوي رقيق، لهجة رسمية بسيطة ومفهومة خليجياً.</li>
+            <li><strong>اللغة الإنجليزية:</strong> Elegant, Soft, Feminine.</li>
+            <li><strong>الابتعاد عن:</strong> الأسلوب الطبي المعقد والجمل الطويلة.</li>
+            <li><strong>التركيز على:</strong> المكونات الفعالة (بدون مبالغة)، أسلوب الحياة (Lifestyle)، والروتين اليومي للعناية.</li>
+            <li><strong>الهوية في النص:</strong> يجب أن يعكس كل نص مفاهيم "الأنوثة، الجودة، حب الذات، والرفاهية البسيطة".</li>
+        </ul>
+    </div>
+	
+	  <div class="section-card">
+        <h2>10. قواعد وصف المنتجات (Copywriting)</h2>
+        
+        <h3>العنوان الرئيسي (Header):</h3>
+        <p>يجب أن يكون قصيراً، جذاباً، مباشراً، ويوضح "الفكرة الأساسية" للمنتج.</p>
+
+        <h3>الوصف التفصيلي (Body):</h3>
+        <p>وصف مفصل وأنثوي يركز على العناصر التالية:</p>
+        <ul>
+            <li>المكونات والفوائد الحقيقية.</li>
+            <li>التجربة الحسية (وصف الملمس والرائحة).</li>
+            <li>نقاط التميز والشفافية في العرض.</li>
+            <li>إبراز جودة المكونات وتوضيح الفوائد بطريقة واقعية.</li>
+        </ul>
+    </div>
+
+    <div class="section-card">
+        <h2>11. الجمهور المستهدف (Target Audience)</h2>
+        
+        <h3>الطبقة الاجتماعية:</h3>
+        <p>الطبقة المتوسطة - فوق المتوسطة - المرتفعة. نساء يقدرن الجودة، المكونات الطبيعية، والرفاهية البسيطة.</p>
+
+        <h3>النطاق الجغرافي:</h3>
+        <ul>
+            <li><strong>الأساسي:</strong> دول الخليج (السعودية، الإمارات، الكويت، البحرين، عمان، قطر).</li>
+            <li><strong>المستقبلي:</strong> التوسع الدولي التدريجي.</li>
+        </ul>
+
+        <h3>الفئات العمرية:</h3>
+        <ul>
+            <li><strong>18-25 سنة:</strong> اهتمام بالتجربة، المظهر، ومواكبة الترند.</li>
+            <li><strong>25-35 سنة:</strong> بحث عن جودة، نتائج واقعية، وحلول عملية.</li>
+            <li><strong>35-45 سنة:</strong> تركيز على العناية المتقدمة والحفاظ على الجمال الطبيعي.</li>
+        </ul>
+    </div>
+
+
+    <div class="footer">
+        <p>A'mie Brand Guidelines © 2025 - For Internal Use Only</p>
+    </div>
+</div>
+
+</body>
+</html>
