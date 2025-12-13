@@ -1,0 +1,566 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>Report - amie</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&display=swap');
+        
+        body { font-family: 'Cairo', sans-serif; background: #f8fafc; color: #1e293b; line-height: 1.6; margin: 0; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; background: #fff; padding: 50px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); border-radius: 12px; border-top: 6px solid #2563eb; }
+        h1 { color: #1e40af; font-size: 32px; margin-bottom: 10px; border-bottom: 2px solid #e2e8f0; padding-bottom: 20px; }
+        h2 { color: #1e3a8a; font-size: 24px; margin-top: 40px; margin-bottom: 20px; border-right: 5px solid #3b82f6; padding-right: 15px; background: #f1f5f9; padding: 10px 15px 10px 0; border-radius: 4px; }
+        .info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-bottom: 30px; background: #f8fafc; p: 20px; border-radius: 8px; border: 1px solid #e2e8f0; padding: 20px; }
+        .info-item strong { display: block; color: #64748b; font-size: 14px; }
+        .info-item span { display: block; color: #0f172a; font-weight: bold; font-size: 16px; }
+        
+        .summary { background: #eff6ff; padding: 25px; border-radius: 8px; margin-bottom: 30px; border: 1px solid #dbeafe; }
+        
+        /* Table Styles */
+        table { width: 100%; border-collapse: separate; border-spacing: 0; margin: 20px 0; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; }
+        th, td { padding: 15px; text-align: right; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
+        th { background: #f1f5f9; color: #334155; font-weight: 700; text-transform: uppercase; font-size: 14px; letter-spacing: 0.5px; }
+        tr:last-child td { border-bottom: none; }
+        tr:hover { background-color: #f8fafc; }
+        
+        /* Keywords Grid */
+        .keywords-container { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        .keyword-tag { display: inline-block; background: #e0f2fe; color: #0369a1; padding: 5px 12px; border-radius: 20px; font-size: 14px; margin: 3px; border: 1px solid #bae6fd; }
+        
+        /* Technical Status */
+        .tech-severity { padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 12px; }
+        .Critical { background: #fee2e2; color: #b91c1c; }
+        .Warning { background: #fef3c7; color: #b45309; }
+        .Notice { background: #dbeafe; color: #1d4ed8; }
+        .Optimization { background: #e0e7ff; color: #3730a3; }
+
+        /* Code Block Styles in Report */
+        .code-block-wrapper {
+            position: relative;
+            margin-top: 10px;
+            background: #1e293b;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            overflow: hidden;
+        }
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #0f172a;
+            padding: 5px 10px;
+            border-bottom: 1px solid #334155;
+        }
+        .code-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            color: #94a3b8;
+            font-weight: bold;
+        }
+        .copy-btn {
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: #cbd5e1;
+            font-size: 10px;
+            padding: 3px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover { background: rgba(255,255,255,0.2); color: white; }
+        
+        /* Responsive Code Block */
+        .code-block {
+            color: #e2e8f0;
+            padding: 15px;
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            direction: ltr;
+            text-align: left;
+            margin: 0;
+            overflow-x: auto; /* Allows horizontal scrolling */
+            white-space: pre-wrap; /* Wraps text if possible, but respects pre formatting */
+            word-wrap: break-word; /* Prevents long lines breaking layout */
+            max-width: 100%;
+        }
+        
+        .recommendation-box {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            padding: 10px;
+            border-radius: 6px;
+            color: #166534;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+        
+        .platform-restriction {
+            background: #fef2f2;
+            border: 1px solid #fee2e2;
+            color: #b91c1c;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            margin-top: 5px;
+            font-weight: bold;
+        }
+
+        .footer { margin-top: 50px; text-align: center; color: #94a3b8; font-size: 14px; border-top: 1px solid #e2e8f0; padding-top: 20px; }
+    </style>
+    <script>
+        function copyCode(btn) {
+            // Find the code element inside the wrapper
+            const wrapper = btn.closest('.code-block-wrapper');
+            const codeEl = wrapper.querySelector('.code-block');
+            const text = codeEl.innerText;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = btn.innerText;
+                btn.innerText = 'تم النسخ!';
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>تقرير SEO Plus</h1>
+        
+        <div class="info-grid">
+            <div class="info-item"><strong>المشروع:</strong> <span>amie</span></div>
+            <div class="info-item"><strong>الرابط:</strong> <span>https://amie-sa.com</span></div>
+            <div class="info-item"><strong>المنصة (CMS):</strong> <span>Zid</span></div>
+            <div class="info-item"><strong>التاريخ:</strong> <span>١٢‏/١٢‏/٢٠٢٥</span></div>
+        </div>
+
+        <div class="summary">
+            <h2 style="margin-top:0">الملخص التنفيذي</h2>
+            <html><p>لقد تم إجراء تحليل فني شامل للموقع الإلكتروني amie-sa.com، والذي يعمل على منصة Zid. يهدف هذا التحليل إلى تقييم الأداء التقني للموقع من منظور تحسين محركات البحث (SEO)، سهولة الوصول (Accessibility)، سرعة التحميل (Core Web Vitals)، قابلية الفهرسة (Indexability)، والأمان (Security).</p><p>أظهر التحليل أن الموقع يتمتع بأساس جيد في بعض الجوانب مثل استخدام بروتوكول HTTPS، وجود خرائط موقع منظمة، واستخدام علامات وصفية (Meta Descriptions) وعلامات بديلة للصور (Alt Text) ذات صلة. ومع ذلك، تم تحديد عدة مجالات رئيسية تتطلب التحسين لتعزيز تجربة المستخدم وتصنيف الموقع في محركات البحث.</p><p>من أبرز التحديات التي تم رصدها هي عدم تطابق سمة اللغة والاتجاه (<code>lang</code> و <code>dir</code>) في وسم <code><html></code> مع اللغة العربية الأساسية للمحتوى، مما يؤثر سلبًا على سهولة الوصول والفهرسة. كما أن وجود شاشة البداية (Splash Screen) والاعتماد الكبير على سكربتات الطرف الثالث يؤثر على سرعة تحميل الصفحة وتفاعلها. لوحظ أيضًا غياب وسم H1 في الصفحة الرئيسية وبعض التناقضات في البيانات المنظمة (Schema.org).</p><p>نحن نقدم في هذا التقرير توصيات مفصلة وحلولًا برمجية قابلة للتطبيق، مع الأخذ في الاعتبار قيود منصة Zid كمنصة مغلقة المصدر. سيتم الإشارة بوضوح إلى التعديلات التي تتطلب التواصل مع دعم المنصة لتنفيذها.</p></html>
+        </div>
+
+        
+
+        
+
+        
+        
+        
+
+        
+
+        
+            <h2>التحليل التقني الشامل (Technical Audit)</h2>
+            <div style="background: #1e293b; color: white; padding: 20px; border-radius: 8px; margin-bottom: 20px; text-align: center;">
+                <h3 style="color: #cbd5e1; margin:0;">الصحة العامة للموقع</h3>
+                <div style="font-size: 48px; font-weight: bold; color: #2dd4bf;">68%</div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 10%">الخطورة</th>
+                        <th style="width: 15%">الفئة</th>
+                        <th style="width: 25%">المشكلة</th>
+                        <th style="width: 50%">التفاصيل والحلول</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                        <tr>
+                            <td><span class="tech-severity Warning">Warning</span></td>
+                            <td>Core Web Vitals</td>
+                            <td><strong>تأثير شاشة البداية على مؤشر LCP</strong></td>
+                            <td>
+                                <div>إن وجود شاشة البداية (Splash Screen)، على الرغم من أنها قد تعزز التجربة البصرية الأولية للمستخدم، إلا أنها تؤدي بطبيعتها إلى تأخير عرض المحتوى الرئيسي للصفحة، مما قد يزيد من قيمة مؤشر Largest Contentful Paint (LCP) ويؤثر سلبًا على سرعة تحميل الصفحة.</div>
+                                
+                                
+                                    <div class="recommendation-box">
+                                        <strong>💡 التوصية:</strong> <span style="color:red;">هذا التعديل لا يمكن اجراؤه مباشرة على منصات مثل Zid، لذلك سوف يتم ارساله إلى دعم المنصة لرؤية ما إذا كان يمكنهم إصلاحه.</span> يُوصى بمراجعة مدة عرض شاشة البداية أو توفير خيار لتجاوزها للمستخدمين المتكررين، وذلك لتقليل تأثيرها على سرعة تحميل المحتوى الرئيسي وتحسين مؤشر LCP.
+                                    </div>
+                                
+
+                                
+                                    <div class="platform-restriction">
+                                       هذا التعديل لا يمكن اجراؤه مباشرة على منصات مثل Zid، لذلك سوف يتم ارساله إلى دعم المنصة لرؤية ما إذا كان يمكنهم إصلاحه.
+                                    </div>
+                                
+
+                                
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td><span class="tech-severity Warning">Warning</span></td>
+                            <td>Core Web Vitals</td>
+                            <td><strong>الاعتماد المفرط على سكربتات الطرف الثالث</strong></td>
+                            <td>
+                                <div>يتم تحميل عدد كبير من سكربتات الطرف الثالث (مثل Google Tag Manager, Facebook Pixel, TikTok, Snapchat, Raqeeb, dmdSdk, OptimizeApp) بشكل متزامن أو شبه متزامن، مما قد يؤثر سلبًا على مؤشرات سرعة التفاعل (FID) ووقت تحميل الصفحة بشكل عام.</div>
+                                
+                                
+                                    <div class="recommendation-box">
+                                        <strong>💡 التوصية:</strong> يُقترح إجراء تدقيق شامل لجميع سكربتات الطرف الثالث لتقييم ضرورتها وتأثيرها على الأداء. يمكن النظر في تأجيل تحميل السكربتات غير الحرجة (Lazy Loading) أو دمج بعضها حيثما أمكن، وذلك لتحسين تفاعل المستخدم الأول (FID).
+                                    </div>
+                                
+
+                                
+
+                                
+                                    <div class="code-block-wrapper">
+                                        <div class="code-header">
+                                            <span class="code-label">Solution / Code Snippet</span>
+                                            <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+                                        </div>
+                                        <pre class="code-block">// مثال على تأجيل تحميل سكربت غير حرج بعد تفاعل المستخدم أو بعد فترة زمنية
+document.addEventListener(&#039;DOMContentLoaded&#039;, function() {
+    setTimeout(function() {
+        var script = document.createElement(&#039;script&#039;);
+        script.src = &#039;https://example.com/non-critical-script.js&#039;;
+        script.defer = true; // أو async
+        document.head.appendChild(script);
+    }, 3000); // تأجيل بعد 3 ثوانٍ
+});</pre>
+                                    </div>
+                                
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td><span class="tech-severity Notice">Notice</span></td>
+                            <td>Core Web Vitals</td>
+                            <td><strong>عدم وجود srcset لصور الأجهزة المحمولة في شريط التمرير</strong></td>
+                            <td>
+                                <div>يستخدم شريط التمرير الرئيسي عناصر <picture> مع وسم <source media="(max-width: 799px)" srcset="" /> الذي يحتوي على سمة srcset فارغة للعرض على الأجهزة المحمولة. هذا يعني أن الأجهزة المحمولة قد تقوم بتحميل الصورة المخصصة لسطح المكتب، مما يؤدي إلى أحجام ملفات أكبر وبطء في التحميل على الشاشات الأصغر.</div>
+                                
+                                
+                                    <div class="recommendation-box">
+                                        <strong>💡 التوصية:</strong> <span style="color:red;">هذا التعديل لا يمكن اجراؤه مباشرة على منصات مثل Zid، لذلك سوف يتم ارساله إلى دعم المنصة لرؤية ما إذا كان يمكنهم إصلاحه.</span> يُوصى بتوفير صور محسّنة ومحددة لـ srcset ضمن وسم <source> الخاص بالشاشات الصغيرة (max-width: 799px). سيساعد ذلك في تحميل الصور بالحجم المناسب لكل جهاز، مما يحسن سرعة التحميل ويقلل استهلاك البيانات.
+                                    </div>
+                                
+
+                                
+                                    <div class="platform-restriction">
+                                       هذا التعديل لا يمكن اجراؤه مباشرة على منصات مثل Zid، لذلك سوف يتم ارساله إلى دعم المنصة لرؤية ما إذا كان يمكنهم إصلاحه.
+                                    </div>
+                                
+
+                                
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td><span class="tech-severity Warning">Warning</span></td>
+                            <td>On-Page</td>
+                            <td><strong>غياب وسم H1 في الصفحة الرئيسية</strong></td>
+                            <td>
+                                <div>لا يحتوي الكود المصدري للصفحة الرئيسية على وسم H1، وهو أمر أساسي لتحسين محركات البحث حيث يساعد محركات البحث على فهم الموضوع الرئيسي للصفحة وتحديد مدى ملاءمته للكلمات المفتاحية المستهدفة.</div>
+                                
+                                
+                                    <div class="recommendation-box">
+                                        <strong>💡 التوصية:</strong> <span style="color:red;">هذا التعديل لا يمكن اجراؤه مباشرة على منصات مثل Zid، لذلك سوف يتم ارساله إلى دعم المنصة لرؤية ما إذا كان يمكنهم إصلاحه.</span> يُستحسن إضافة وسم H1 واحد وواضح في الجزء المرئي من الصفحة الرئيسية، يعكس المحتوى الأساسي للمتجر وكلماته المفتاحية المستهدفة.
+                                    </div>
+                                
+
+                                
+                                    <div class="platform-restriction">
+                                       هذا التعديل لا يمكن اجراؤه مباشرة على منصات مثل Zid، لذلك سوف يتم ارساله إلى دعم المنصة لرؤية ما إذا كان يمكنهم إصلاحه.
+                                    </div>
+                                
+
+                                
+                                    <div class="code-block-wrapper">
+                                        <div class="code-header">
+                                            <span class="code-label">Solution / Code Snippet</span>
+                                            <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+                                        </div>
+                                        <pre class="code-block">&lt;!-- مثال على H1 مقترح، يُضاف في مكان مناسب ضمن محتوى الصفحة الرئيسية --&gt;
+&lt;h1 class=&quot;sr-only&quot;&gt;Ami متجر لبيع منتجات التجميل والعناية الطبيعية&lt;/h1&gt;
+&lt;!-- أو في مكان مرئي إذا كان التصميم يسمح بذلك --&gt;
+&lt;!-- &lt;h1 class=&quot;text-3xl font-bold text-center my-8&quot;&gt;منتجات Ami الطبيعية لجمالك&lt;/h1&gt; --&gt;</pre>
+                                    </div>
+                                
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td><span class="tech-severity Notice">Notice</span></td>
+                            <td>On-Page</td>
+                            <td><strong>عدم اتساق اسم العلامة التجارية في البيانات المنظمة</strong></td>
+                            <td>
+                                <div>اسم العلامة التجارية في البيانات المنظمة (Schema.org Organization) هو "A.mi" بينما في وسم العنوان (Title Tag) والوصف (Meta Description) هو "Ami". هذا التناقض قد يؤثر على فهم محركات البحث للعلامة التجارية وعلى عرضها في نتائج البحث.</div>
+                                
+                                
+                                    <div class="recommendation-box">
+                                        <strong>💡 التوصية:</strong> يُوصى بتوحيد اسم العلامة التجارية في جميع عناصر الصفحة، بما في ذلك البيانات المنظمة، لضمان الاتساق وتعزيز التعرف على العلامة التجارية.
+                                    </div>
+                                
+
+                                
+
+                                
+                                    <div class="code-block-wrapper">
+                                        <div class="code-header">
+                                            <span class="code-label">Solution / Code Snippet</span>
+                                            <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+                                        </div>
+                                        <pre class="code-block">&lt;script type=&quot;application/ld+json&quot;&gt;
+        {
+          &quot;@context&quot;: &quot;https://schema.org&quot;
+          ,&quot;@type&quot;: &quot;Organization&quot;
+          ,&quot;url&quot;: &quot;https://amie-sa.com/&quot;
+          ,&quot;name&quot;: &quot;Ami&quot; 
+          ,&quot;description&quot;: &quot;اكتشفي منتجات Ami الطبيعية لمنتجات التجميل والعناية الشخصية والعطور . واضيفي لمسه من الطبيعه لروتينك اليومي ، تسوقي الان ولاتفوتي عروضنا الحصرية!&quot;
+          ,&quot;logo&quot;: &quot;https://media.zid.store/e7880185-7298-481f-9cc2-4c8fedcaa8d5/e3f66728-904e-4d00-b713-473f3477b6a6.png&quot;
+        }
+&lt;/script&gt;</pre>
+                                    </div>
+                                
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td><span class="tech-severity Notice">Notice</span></td>
+                            <td>On-Page</td>
+                            <td><strong>حجم الشعار صغير في البيانات المنظمة</strong></td>
+                            <td>
+                                <div>شعار المتجر المحدد في البيانات المنظمة (Schema.org Organization) هو صورة صغيرة بحجم 32x32 بكسل. توصي Google باستخدام شعار بحجم 112x112 بكسل على الأقل لضمان عرض أفضل في نتائج البحث الغنية (Rich Results).</div>
+                                
+                                
+                                    <div class="recommendation-box">
+                                        <strong>💡 التوصية:</strong> يُستحسن استبدال رابط الشعار في البيانات المنظمة بصورة ذات دقة أعلى (112x112 بكسل على الأقل) لضمان عرض أفضل في نتائج البحث الغنية (Rich Results).
+                                    </div>
+                                
+
+                                
+
+                                
+                                    <div class="code-block-wrapper">
+                                        <div class="code-header">
+                                            <span class="code-label">Solution / Code Snippet</span>
+                                            <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+                                        </div>
+                                        <pre class="code-block">&lt;script type=&quot;application/ld+json&quot;&gt;
+        {
+          &quot;@context&quot;: &quot;https://schema.org&quot;
+          ,&quot;@type&quot;: &quot;Organization&quot;
+          ,&quot;url&quot;: &quot;https://amie-sa.com/&quot;
+          ,&quot;name&quot;: &quot;Ami&quot;
+          ,&quot;description&quot;: &quot;اكتشفي منتجات Ami الطبيعية لمنتجات التجميل والعناية الشخصية والعطور . واضيفي لمسه من الطبيعه لروتينك اليومي ، تسوقي الان ولاتفوتي عروضنا الحصرية!&quot;
+          ,&quot;logo&quot;: &quot;https://media.zid.store/e7880185-7298-481f-9cc2-4c8fedcaa8d5/e3f66728-904e-4d00-b713-473f3477b6a6.png&quot; 
+        }
+&lt;/script&gt;</pre>
+                                    </div>
+                                
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td><span class="tech-severity Notice">Notice</span></td>
+                            <td>On-Page</td>
+                            <td><strong>غياب وسم Meta Keywords</strong></td>
+                            <td>
+                                <div>لا يتضمن الكود المصدري وسم <meta name="keywords">. على الرغم من أن Google لا تستخدم هذا الوسم للترتيب، إلا أنه قد يكون مفيدًا لمحركات بحث أخرى أو لأغراض تنظيمية داخلية.</div>
+                                
+                                
+                                    <div class="recommendation-box">
+                                        <strong>💡 التوصية:</strong> يُمكن إضافة وسم <meta name="keywords"> يتضمن الكلمات المفتاحية الرئيسية للمتجر لتعزيز التوافق مع معايير SEO العامة.
+                                    </div>
+                                
+
+                                
+
+                                
+                                    <div class="code-block-wrapper">
+                                        <div class="code-header">
+                                            <span class="code-label">Solution / Code Snippet</span>
+                                            <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+                                        </div>
+                                        <pre class="code-block">&lt;!-- يُضاف داخل وسم &lt;head&gt; --&gt;
+&lt;meta name=&quot;keywords&quot; content=&quot;منتجات تجميل طبيعية, عناية شخصية, عطور, مرطب شفاه, مقشر جسم, زيت تشميس, واكس شعر, السعودية&quot;&gt;</pre>
+                                    </div>
+                                
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td><span class="tech-severity Critical">Critical</span></td>
+                            <td>Accessibility</td>
+                            <td><strong>سمات اللغة والاتجاه غير صحيحة</strong></td>
+                            <td>
+                                <div>تم تحديد سمة lang="en" و dir="ltr" في وسم <html>، بينما المحتوى الأساسي للموقع باللغة العربية. هذا التناقض يؤثر سلبًا على تجربة المستخدمين الذين يعتمدون على قارئات الشاشة (Screen Readers) ويؤثر على فهم محركات البحث للغة المحتوى.</div>
+                                
+                                
+                                    <div class="recommendation-box">
+                                        <strong>💡 التوصية:</strong> <span style="color:red;">هذا التعديل لا يمكن اجراؤه مباشرة على منصات مثل Zid، لذلك سوف يتم ارساله إلى دعم المنصة لرؤية ما إذا كان يمكنهم إصلاحه.</span> يُوصى بشدة بتعديل سمة lang إلى ar و dir إلى rtl في وسم <html> ليعكس اللغة والاتجاه الصحيحين للمحتوى الرئيسي للموقع.
+                                    </div>
+                                
+
+                                
+                                    <div class="platform-restriction">
+                                       هذا التعديل لا يمكن اجراؤه مباشرة على منصات مثل Zid، لذلك سوف يتم ارساله إلى دعم المنصة لرؤية ما إذا كان يمكنهم إصلاحه.
+                                    </div>
+                                
+
+                                
+                                    <div class="code-block-wrapper">
+                                        <div class="code-header">
+                                            <span class="code-label">Solution / Code Snippet</span>
+                                            <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+                                        </div>
+                                        <pre class="code-block">&lt;!-- الكود المقترح: --&gt;
+&lt;html class=&quot;scroll-smooth&quot; lang=&quot;ar&quot; dir=&quot;rtl&quot;&gt;</pre>
+                                    </div>
+                                
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td><span class="tech-severity Warning">Warning</span></td>
+                            <td>Accessibility</td>
+                            <td><strong>عدم تطابق og:locale مع لغة المحتوى الأساسية</strong></td>
+                            <td>
+                                <div>تم تحديد og:locale كـ "en" في Open Graph meta tags، بينما اللغة الأساسية للمحتوى هي العربية. هذا التناقض يمكن أن يؤثر على كيفية عرض المحتوى عند مشاركته على منصات التواصل الاجتماعي.</div>
+                                
+                                
+                                    <div class="recommendation-box">
+                                        <strong>💡 التوصية:</strong> يُستحسن تعديل og:locale إلى ar_AR أو ar_SA ليعكس اللغة الإقليمية الصحيحة للمحتوى، مما يضمن عرضًا أفضل عند المشاركة على منصات التواصل الاجتماعي.
+                                    </div>
+                                
+
+                                
+
+                                
+                                    <div class="code-block-wrapper">
+                                        <div class="code-header">
+                                            <span class="code-label">Solution / Code Snippet</span>
+                                            <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+                                        </div>
+                                        <pre class="code-block">&lt;!-- يُضاف داخل وسم &lt;head&gt; --&gt;
+&lt;meta property=&quot;og:locale&quot; content=&quot;ar_AR&quot; /&gt;
+&lt;!-- أو ar_SA إذا كان هناك دعم محدد للمملكة العربية السعودية --&gt;</pre>
+                                    </div>
+                                
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td><span class="tech-severity Notice">Notice</span></td>
+                            <td>Indexability</td>
+                            <td><strong>غياب وسم Meta Robots</strong></td>
+                            <td>
+                                <div>لا يتضمن الكود المصدري وسم <meta name="robots">. على الرغم من أن السلوك الافتراضي هو index, follow، إلا أن تحديده بشكل صريح يمكن أن يوفر تحكمًا أوضح لمحركات البحث في كيفية التعامل مع الصفحة.</div>
+                                
+                                
+                                    <div class="recommendation-box">
+                                        <strong>💡 التوصية:</strong> يُمكن إضافة وسم <meta name="robots"> بقيمة index, follow داخل وسم <head> لضمان وضوح تعليمات الزحف والفهرسة لمحركات البحث.
+                                    </div>
+                                
+
+                                
+
+                                
+                                    <div class="code-block-wrapper">
+                                        <div class="code-header">
+                                            <span class="code-label">Solution / Code Snippet</span>
+                                            <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+                                        </div>
+                                        <pre class="code-block">&lt;!-- يُضاف داخل وسم &lt;head&gt; --&gt;
+&lt;meta name=&quot;robots&quot; content=&quot;index, follow&quot;&gt;</pre>
+                                    </div>
+                                
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td><span class="tech-severity Notice">Notice</span></td>
+                            <td>Security</td>
+                            <td><strong>سياسة أمان المحتوى (CSP) أساسية وغير شاملة</strong></td>
+                            <td>
+                                <div>يتضمن الموقع سياسة أمان المحتوى (CSP) الأساسية upgrade-insecure-requests. بينما هذا جيد لفرض HTTPS، إلا أنه لا يوفر حماية كاملة ضد هجمات مثل XSS من خلال تحديد مصادر موثوقة للسكربتات والأنماط والصور.</div>
+                                
+                                
+                                    <div class="recommendation-box">
+                                        <strong>💡 التوصية:</strong> <span style="color:red;">هذا التعديل لا يمكن اجراؤه مباشرة على منصات مثل Zid، لذلك سوف يتم ارساله إلى دعم المنصة لرؤية ما إذا كان يمكنهم إصلاحه.</span> يُوصى بتعزيز سياسة أمان المحتوى (CSP) لتشمل توجيهات أكثر تحديدًا مثل script-src, style-src, img-src، لتحديد المصادر الموثوقة للموارد. هذا يعزز الحماية ضد حقن السكربتات الضارة (XSS).
+                                    </div>
+                                
+
+                                
+                                    <div class="platform-restriction">
+                                       هذا التعديل لا يمكن اجراؤه مباشرة على منصات مثل Zid، لذلك سوف يتم ارساله إلى دعم المنصة لرؤية ما إذا كان يمكنهم إصلاحه.
+                                    </div>
+                                
+
+                                
+                                    <div class="code-block-wrapper">
+                                        <div class="code-header">
+                                            <span class="code-label">Solution / Code Snippet</span>
+                                            <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+                                        </div>
+                                        <pre class="code-block">&lt;!-- الكود المقترح (مثال): --&gt;
+&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;
+    default-src &#039;self&#039;;
+    script-src &#039;self&#039; https://*.zid.store https://*.salla.network https://*.googleapis.com https://*.gstatic.com https://*.googletagmanager.com https://*.facebook.net https://*.tiktok.com https://*.snaptr.com https://*.sc-static.net https://*.mazeedplus.com https://*.optimizeapp-prod-media.s3.me-south-1.amazonaws.com https://*.zam-conversions-snapchat.zid.sa;
+    style-src &#039;self&#039; &#039;unsafe-inline&#039; https://*.zid.store https://*.salla.network https://*.googleapis.com;
+    img-src &#039;self&#039; data: https://*.zid.store https://*.media.zid.store;
+    font-src &#039;self&#039; https://*.salla.network https://fonts.gstatic.com;
+    connect-src &#039;self&#039; https://*.zid.sa https://*.google-analytics.com https://*.facebook.com https://*.tiktok.com https://*.snaptr.com https://*.sc-static.net https://*.mazeedplus.com https://*.optimizeapp-prod-media.s3.me-south-1.amazonaws.com https://*.zam-conversions-snapchat.zid.sa;
+    frame-src https://*.facebook.com https://*.tiktok.com;
+    object-src &#039;none&#039;;
+    base-uri &#039;self&#039;;
+    form-action &#039;self&#039;;
+    upgrade-insecure-requests;
+&quot;&gt;</pre>
+                                    </div>
+                                
+                            </td>
+                        </tr>
+                    
+                        <tr>
+                            <td><span class="tech-severity Warning">Warning</span></td>
+                            <td>Security</td>
+                            <td><strong>الاعتماد المفرط على سكربتات الطرف الثالث</strong></td>
+                            <td>
+                                <div>يعتمد الموقع بشكل كبير على العديد من سكربتات الطرف الثالث لأغراض التحليلات والتتبع والإعلانات. كل سكربت من هذه السكربتات يمثل نقطة ضعف محتملة قد تؤثر على أمان الموقع في حال تعرض أي منها للاختراق.</div>
+                                
+                                
+                                    <div class="recommendation-box">
+                                        <strong>💡 التوصية:</strong> يُوصى بمراجعة دورية لجميع مزودي خدمات الطرف الثالث والتأكد من ممارساتهم الأمنية. كما يُفضل تقليل عدد السكربتات إلى الضروري فقط أو استخدام حلول موحدة (مثل Google Tag Manager) لإدارة أكبر عدد ممكن من التبعيات لتقليل سطح الهجوم.
+                                    </div>
+                                
+
+                                
+
+                                
+                                    <div class="code-block-wrapper">
+                                        <div class="code-header">
+                                            <span class="code-label">Solution / Code Snippet</span>
+                                            <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+                                        </div>
+                                        <pre class="code-block">&lt;!-- مثال على إدارة السكربتات عبر GTM لتقليل التبعيات المباشرة --&gt;
+&lt;!-- بدلاً من تضمين كل سكربت بشكل منفصل، يمكن إدارتها كعلامات (Tags) في GTM --&gt;
+&lt;!-- &lt;script&gt;(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({&#039;gtm.start&#039;: new Date().getTime(),event:&#039;gtm.js&#039;});var f=d.getElementsByTagName(s)[0], j=d.createElement(s),dl=l!=&#039;dataLayer&#039;?&#039;&amp;l=&#039;+l:&#039;&#039;;j.async=true;j.src=&#039;https://www.googletagmanager.com/gtm.js?id=&#039;+i+dl;f.parentNode.insertBefore(j,f);})(window,document,&#039;script&#039;,&#039;gtmDataLayer&#039;,&#039;GTM-MK9FZSDM&#039;);&lt;/script&gt; --&gt;
+&lt;!-- يجب التأكد من أن جميع السكربتات الأخرى تدار من خلال GTM لتقليل التعرض المباشر --&gt;</pre>
+                                    </div>
+                                
+                            </td>
+                        </tr>
+                    
+                </tbody>
+            </table>
+        
+        
+        
+
+        
+
+        <div class="footer">
+            Generated by Master SEO Plus AI Tool &copy; 2025
+        </div>
+    </div>
+</body>
+</html>
+  
